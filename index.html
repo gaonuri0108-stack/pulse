@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>시황판 by SMIC 김연우</title>
+<style>
+  :root{--bg:#fff;--fg:#191f28;--sub:#6b7684;--blue:#3182f6}
+  @media (prefers-color-scheme:dark){:root{--bg:#17171c;--fg:#f2f4f6;--sub:#9ea6b0}}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard",sans-serif;text-align:center;padding:0 16px}
+  h1{font-size:28px;font-weight:800;margin:0 0 6px}
+  .by{font-size:17px;font-weight:700;color:var(--sub)} .by b{color:var(--blue)}
+  p{color:var(--sub);font-size:14px;margin-top:22px;line-height:1.6}
+</style></head><body>
+<div><h1>시황판</h1><div class="by">by <b>SMIC</b> 김연우</div><p id="msg">시황판으로 이동 중…</p></div>
+<script>
+(async () => {
+  const msg = document.getElementById('msg');
+  let tok = (location.hash || '').replace(/^#\/?/, '').trim();
+  try { if (tok) localStorage.setItem('pulse_tok', tok); else tok = localStorage.getItem('pulse_tok') || ''; } catch (e) {}
+  if (!/^[A-Za-z0-9_-]{12,}$/.test(tok)) { msg.textContent = '받은 링크 전체(# 뒤까지)로 열어주세요.'; return; }
+  try {
+    const r = await fetch('url.txt?t=' + Date.now(), {cache: 'no-store'});
+    const base = (await r.text()).trim();
+    if (!/^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(base)) throw 0;
+    location.replace(base + '/' + tok + '/');
+  } catch (e) { msg.textContent = '시황판 서버 주소를 못 불러왔어요. 잠시 후 새로고침해 주세요.'; }
+})();
+</script>
+</body></html>
